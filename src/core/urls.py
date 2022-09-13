@@ -21,6 +21,7 @@ from rest_framework import routers
 # from user.viewsets import UserViewSet
 from user import viewsets as user_viewsets
 from user_data import viewsets as user_data_viewsets
+from cartao import viewsets as cartao_viewsets
 
 
 # route = routers.DefaultRouter()
