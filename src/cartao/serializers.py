@@ -6,7 +6,7 @@ class CartaoSerializer(serializers.ModelSerializer):
    class Meta:
        model = models.Cartao
        fields = [
-           'email',
+           'user',
            'codigo',
            'tipo',
            'apelido_cartao',

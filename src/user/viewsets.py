@@ -40,7 +40,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
     def patch_object(self):
-        # updates the user's data
+        # atualiza somente o nome do usuario
         self.request.user.patch(full_name=self.request.data.full_name)
         return Response(None, status=status.HTTP_202_ACCEPTED)
 
