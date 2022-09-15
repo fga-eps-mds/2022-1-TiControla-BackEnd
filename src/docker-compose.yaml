@@ -6,18 +6,12 @@ services:
       - db
     restart: always
     build: ./
-    command: >
-      sh -c "python manage.py flush --no-input &&
-             python manage.py migrate &&
-             DJANGO_SUPERUSER_PASSWORD=pass ./manage.py createsuperuser --no-input --email=leonardomichalskim@gmail.com &&
-             python manage.py runserver 0.0.0.0:8000"
+    command: "./start.sh"
     ports:
-      - "8000:8000"
+      - "8080:8080"
     env_file:
+      - ./debug.env
       - ./.env
-    # volumes:
-    #   - .:/core
-
   db:
     container_name: db
     restart: always
@@ -25,7 +19,7 @@ services:
     ports:
       - "3306:3306"
     env_file:
-      - ./development.env
+      - ./debug.env
     volumes:
       - mysql_data:/var/lib/mysql
 

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pages-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - "161.35.248.92.nip.io"
+    secretName: "ticontrola-api-tls"
+  rules:
+    - host: "161.35.248.92.nip.io"
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          # pathType: Exact
+          backend:
+            service:
+              name: ticontrolaapi
+              port:
+                number: 80

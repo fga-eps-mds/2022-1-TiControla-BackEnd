@@ -1,0 +1,151 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+          - containerPort: 3306
+        env:
+        - name: MYSQL_DATABASE
+          value: ticontroladb
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: MYSQL_USER
+              optional: false
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: MYSQL_PASSWORD
+              optional: false
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: MYSQL_ROOT_PASSWORD
+              optional: false
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-mysql
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP  # protocolo padrao
+    port: 3306
+    targetPort: 3306
+  selector:
+    app: mysql
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticontrolaapi
+spec:
+  selector:
+    matchLabels:
+      app: ticontrolaapi
+  template:
+    metadata:
+      labels:
+        app: ticontrolaapi
+    spec:
+      containers:
+      - name: ticontrolaapi
+        image: leommiranda/ti-controla-django-api:latest
+        imagePullPolicy: "Always"
+        ports:
+          - containerPort: 3306
+        env:
+          - name: DJANGO_SUPERUSER_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: DJANGO_SUPERUSER_EMAIL
+                optional: false # same as default; "api-secret" must exist and include a key named "username"
+          - name: DJANGO_SUPERUSER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: DJANGO_SUPERUSER_PASSWORD
+                optional: false
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: SECRET_KEY
+                optional: false
+          - name: EMAIL_HOST_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: EMAIL_HOST_USER
+                optional: false
+          - name: EMAIL_HOST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: EMAIL_HOST_PASSWORD
+                optional: false
+          - name: DEFAULT_FROM_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: EMAIL_HOST_USER
+                optional: false
+          - name: MYSQL_DATABASE
+            value: ticontroladb
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: MYSQL_USER
+                optional: false
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: MYSQL_PASSWORD
+                optional: false
+          - name: MYSQL_DATABASE_HOST
+            value: service-mysql
+          - name: DEBUG
+            value: "0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticontrolaapi
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP  # protocolo padrao
+    port: 80
+    targetPort: 8080
+  selector:
+    # matchLabels:
+    app: ticontrolaapi

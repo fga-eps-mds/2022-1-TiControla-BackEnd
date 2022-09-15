@@ -42,7 +42,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_verified', False)
+        extra_fields.setdefault('is_verified', True)
         return self._create_user(email, password, full_name, **extra_fields)
 
 

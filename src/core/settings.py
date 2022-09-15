@@ -21,14 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#+ax)k%&en_31$8s-*yyb^#*t3u4007(5=xi(q168rxxyt0tc('
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.getenv("DEBUG"))
 
 # SECURITY WARNING: nao permitir todos os hosts na producao
 ALLOWED_HOSTS = ['*']
 #ALLOWED_HOSTS = []
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -43,7 +45,6 @@ INSTALLED_APPS = [
     'user',
     'user_data',
     'cartao',
-    'core',
 ]
 
 MIDDLEWARE = [
@@ -153,4 +154,3 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
-
