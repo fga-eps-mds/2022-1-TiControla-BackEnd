@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+    branches: 
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install dependencies for pycodestyle
+        run: |
+          python -m pip install --upgrade pip
+          pip install pycodestyle
+      - name: Lint Python code
+        run: |
+          echo 'LINT_MESSAGE<<EOF' >> $GITHUB_ENV
+          echo $'Output do pycodestyle configurado de acordo com o PEP8:\n```\n' >> $GITHUB_ENV
+          pycodestyle --select E,W --ignore=E121,E123,E126,E133,E226,E241,E242,E704,W503,W504,E131 --exclude=.git,*.pyc,*migrations* --count --show-source  --statistics --show-pep8 src/ | grep -e src -e .py -A 2 >> $GITHUB_ENV
+          echo $'\n```\n' >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Post result to PR
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: ${{ env.LINT_MESSAGE }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: false # This is the default
+

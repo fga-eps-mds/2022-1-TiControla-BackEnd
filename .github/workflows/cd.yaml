@@ -2,13 +2,12 @@
 
 name: CD
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
+  pull_request:
+    branches: 
+      - main
+    types:
+      - closed
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -17,6 +16,7 @@ on:
 jobs:
   # upload a imagem docker para o docker registry
   docker-upload:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -39,6 +39,7 @@ jobs:
             leommiranda/ti-controla-django-api:latest
             leommiranda/ti-controla-django-api:${{github.run_number}}
   CD:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     needs: [docker-upload]
     steps:
