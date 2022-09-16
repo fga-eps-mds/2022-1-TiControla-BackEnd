@@ -148,13 +148,17 @@ cd src
 ```
 
 ##### Rodar um terminal dentro da imagem docker usando o seguinte comando
+
 ```
-docker run --rm -it -v $(pwd):/current_dir -w /current_dir --user "$(id -u):$(id -g)" leommiranda/ti-controla-django-api bash
+docker-compose run --rm --user "$(id -u):$(id -g)" -w /current_dir api bash
 ```
 
 ##### Criar as migrations
+
 ```
 python3 manage.py makemigrations
 python3 manage.py makemigrations user
 python3 manage.py makemigrations user_data
+python3 manage.py makemigrations cartao
+python3 manage.py makemigrations gastos
 ```
