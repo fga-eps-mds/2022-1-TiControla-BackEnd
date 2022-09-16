@@ -1,14 +1,16 @@
-from gastos import serializers, models
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from django.contrib.auth import get_user
+
+from gastos.models import GastoCredito, GastoDebito, GastoFixo
+from gastos.serializers import GastoCreditoSerializer, GastoDebitoSerializer, GastoFixoSerializer
 
 
 # TODO: deduplicate boilerplate code
 class GastoCreditoView(generics.CreateAPIView, generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = serializers.GastoCreditoSerializer
+    serializer_class = GastoCreditoSerializer
 
     def post(self, request):
         # adiciona gasto_credito a lista de gastos do usuario
@@ -69,7 +71,7 @@ class GastoCreditoView(generics.CreateAPIView, generics.RetrieveUpdateAPIView, g
 class GastoDebitoView(generics.CreateAPIView, generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = serializers.GastoDebitoSerializer
+    serializer_class = GastoDebitoSerializer
 
     def post(self, request):
         # adiciona gasto_debito a lista de gastos do usuario
@@ -128,7 +130,7 @@ class GastoDebitoView(generics.CreateAPIView, generics.RetrieveUpdateAPIView, ge
 class GastoFixoView(generics.CreateAPIView, generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = serializers.GastoFixoSerializer
+    serializer_class = GastoFixoSerializer
 
     def post(self, request):
         # adiciona gasto_fixo a lista de gastos do usuario

@@ -22,14 +22,10 @@ class CartaoView(generics.CreateAPIView, generics.RetrieveUpdateAPIView, generic
         for key in request.data.keys():
             if key in ['email', 'id']:
                 continue
-            print(key)
             kwargs[key] = request.data[key]
-
-        print('continueee key')
 
         # set default values for keys that are not in request.data
         for key in Cartao._meta.get_fields():
-            print(key)
             if key.name not in kwargs.keys():
                 kwargs[key.name] = key.get_default()
 

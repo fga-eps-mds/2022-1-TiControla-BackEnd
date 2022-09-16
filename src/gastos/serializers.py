@@ -3,6 +3,7 @@ from gastos.models import GastoCredito, GastoDebito, GastoFixo
 from django.db import models
 
 
+
 class GastoCreditoSerializer(serializers.ModelSerializer):
    class Meta:
        model = GastoCredito
