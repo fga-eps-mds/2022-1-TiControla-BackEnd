@@ -1,7 +1,12 @@
 ![Logo TiControla](https://user-images.githubusercontent.com/102192917/184401954-7b7c706b-c287-4c22-83b0-a3039213c627.jpg)
 
-## Links úteis
+## Repositórios do projeto
+- [Docs](https://github.com/fga-eps-mds/2022-1-TiControla-Docs)
+- [FrontEnd](https://github.com/fga-eps-mds/2022-1-TiControla-FrontEnd)
+- [BackEnd](https://github.com/fga-eps-mds/2022-1-TiControla-BackEnd)
+- [IaC](https://github.com/fga-eps-mds/2022-1-TiControla-IaC)
 
+## Links úteis
 - [Como fazer requisições HTTP para a API.](#como-fazer-requisições-http-para-a-api-usando-curl)
 - [Setup do ambiente de produção.](/src#setup-do-ambiente-de-produção)
 - [Setup do ambiente de local de desenvolvimento.](/src#setup-do-ambiente-de-debugdesenvolvimento)
