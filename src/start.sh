@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 30
+sleep 45
 python3 manage.py makemigrations
 python3 manage.py makemigrations user
 python3 manage.py makemigrations user_data
