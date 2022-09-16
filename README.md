@@ -38,7 +38,7 @@ curl -H "Content-Type: application/json" \
 
 ```
 curl -H "referer: https://161.35.248.92.nip.io/" \
-     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_CSRFTOKEN;" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
      -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
      -X POST \
      'https://161.35.248.92.nip.io/logout/'
@@ -47,7 +47,7 @@ curl -H "referer: https://161.35.248.92.nip.io/" \
 ##### Como requisitar dados pessoais do usuário logado (email, nome completo, data de criação do usuário). Essa requisição pode ser usada para mostrar uma tela com os dados pessoais que o usuário informou à API. Lembre de reutilizar o "sessionid".
 
 ```
-curl -H "Cookie: sessionid=SUBSTITUIR_POR_CSRFTOKEN;" \
+curl -H "Cookie: sessionid=SUBSTITUIR_POR_SESSIONID;" \
      -X GET \
      'https://161.35.248.92.nip.io/profile/'
 ```
@@ -56,7 +56,7 @@ curl -H "Cookie: sessionid=SUBSTITUIR_POR_CSRFTOKEN;" \
 
 ```
 curl -H "referer: https://161.35.248.92.nip.io/" \
-     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_CSRFTOKEN;" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
      -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
      -X PATCH \
      --data 'full_name=Leonardo Miranda' \
@@ -68,7 +68,7 @@ curl -H "referer: https://161.35.248.92.nip.io/" \
 ##### Como requisitar dados do usuário logado relacionados a finanças. Essa requisição pode ser usada para mostrar o saldo do usuário, o limite disponível do cartão e o limite máximo do cartão. Para cada usuário, só há um valor de saldo, um único valor de limite disponível e um único valor de limite máximo. Lembre de reutilizar o "sessionid".
 
 ```
-curl -H "Cookie: sessionid=SUBSTITUIR_POR_CSRFTOKEN;" \
+curl -H "Cookie: sessionid=SUBSTITUIR_POR_SESSIONID;" \
      -X GET \
      'https://161.35.248.92.nip.io/profile/data/'
 ```
@@ -77,7 +77,7 @@ curl -H "Cookie: sessionid=SUBSTITUIR_POR_CSRFTOKEN;" \
 
 ```
 curl -H "referer: https://161.35.248.92.nip.io/" \
-     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_CSRFTOKEN;" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
      -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
      -X PATCH \
      --data 'limite_maximo=7000' \
