@@ -22,6 +22,7 @@ from rest_framework import routers
 from user import viewsets as user_viewsets
 from user_data import viewsets as user_data_viewsets
 from cartao import viewsets as cartao_viewsets
+from gastos import viewsets as gastos_viewsets
 
 
 # route = routers.DefaultRouter()
@@ -36,5 +37,12 @@ urlpatterns = [
     path('login/', user_viewsets.LoginView.as_view()),
     path('logout/', user_viewsets.LogoutView.as_view()),
     path('profile/', user_viewsets.ProfileView.as_view()),
+    # path('password-reset/', password_reset, name='password_reset'),
+    # retorna tambem os cartoes e gastos do usuario
     path('profile/data/', user_data_viewsets.UserDataView.as_view()),
+    # path('limite-disponivel/mensal/', user_data_viewsets.LimiteDisponivelMensalView.as_view()),
+    path('profile/cartao/', cartao_viewsets.CartaoView.as_view()),
+    path('profile/gastos/debito', gastos_viewsets.GastoDebitoView.as_view()),
+    path('profile/gastos/credito', gastos_viewsets.GastoCreditoView.as_view()),
+    path('profile/gastos/fixo', gastos_viewsets.GastoFixoView.as_view()),
 ]

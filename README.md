@@ -80,3 +80,52 @@ curl -H "referer: https://161.35.248.92.nip.io/" \
      --data 'limite_maximo=7000&limite_disponivel=1500' \
      'https://161.35.248.92.nip.io/profile/data/'
 ```
+
+### Cartões do usuário
+
+##### Criar cartão. O campo "apelido_cartao" é obrigatório.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X POST \
+        --data 'apelido_cartao=nubank&limite_credito=7000' \
+        'https://161.35.248.92.nip.io/profile/cartao/'
+```
+
+
+##### Listar cartões do usuário logado.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X GET \
+        'https://161.35.248.92.nip.io/profile/cartao/'
+```
+
+
+##### Alterar cartão do usuário por id. O id é do cartão.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X PATCH \
+        --data 'id=1&apelido_cartao=digio&limite_credito=2000' \
+        'https://161.35.248.92.nip.io/profile/cartao/'
+```
+
+
+##### Deletar cartao do usuário por id. O id é do cartão.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X DELETE \
+        --data 'id=1' \
+        'https://161.35.248.92.nip.io/profile/cartao/'
+```
+

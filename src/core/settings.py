@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'user',
     'user_data',
     'cartao',
+    'gastos',
 ]
 
 MIDDLEWARE = [
