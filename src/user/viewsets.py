@@ -32,6 +32,8 @@ class LoginView(views.APIView):
 
 class LogoutView(views.APIView):
 
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, format=None):
         logout(request)
         return Response(None, status=status.HTTP_204_NO_CONTENT)
@@ -40,6 +42,7 @@ class LogoutView(views.APIView):
 # classe para mostrar/atualizar os dados do usuario, requer que o usuario esteja autenticado
 class ProfileView(generics.RetrieveUpdateAPIView):
 
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.UserSerializer
 
     def get_object(self):
@@ -47,14 +50,15 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
     def patch_object(self):
-        # updates the user's data
+        # atualiza somente o nome do usuario
         self.request.user.patch(full_name=self.request.data.full_name)
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        return Response(self.serializer_class(self.request.user).data, status=status.HTTP_202_ACCEPTED)
 
 
 class RegisterView(views.APIView):
     # This view should be accessible also for unauthenticated users.
     permission_classes = (permissions.AllowAny,)
+    serializer_class = serializers.UserSerializer
 
     def post(self, request, format=None):
         user_model = get_user_model()
@@ -77,12 +81,13 @@ class RegisterView(views.APIView):
             subject='Ative sua conta do TiControla.',
             message='Acesse o seguinte link para validar a sua conta:\n' + link
         )
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        return Response(self.serializer_class(current_user).data, status=status.HTTP_202_ACCEPTED)
 
 
 class VerifyAccountView(views.APIView):
     # This view should be accessible also for unauthenticated users.
     permission_classes = (permissions.AllowAny,)
+    serializer_class = serializers.UserSerializer
 
     def get(self, request, format=None):
         token = request.GET.get('token')
@@ -99,4 +104,4 @@ class VerifyAccountView(views.APIView):
         current_user.is_verified = True
         current_user.save()
 
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        return Response(self.serializer_class(current_user).data, status=status.HTTP_202_ACCEPTED)

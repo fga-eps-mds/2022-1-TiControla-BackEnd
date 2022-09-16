@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='UserData',
+            name='Cartao',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(db_index=True, max_length=255, unique=True)),
-                ('saldo', models.FloatField(default=0.0)),
-                ('limite_maximo', models.FloatField(default=0.0)),
+                ('email', models.EmailField(default='', max_length=255)),
+                ('limite_credito', models.FloatField(default=0.0)),
+                ('apelido_cartao', models.CharField(max_length=150, unique=True)),
             ],
         ),
     ]

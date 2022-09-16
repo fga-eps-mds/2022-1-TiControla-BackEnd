@@ -55,14 +55,14 @@ class LoginSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-   class Meta:
-       model = models.User
-       fields = [
-           'email',
-           'full_name',
-           'is_active',
-           'is_verified',
-           'is_superuser',
-           'created_at',
-           'updated_at',
-       ]
+    class Meta:
+        model = models.User
+        fields = [
+            'email',
+            'full_name',
+            'is_active',
+            'is_verified',
+            'is_superuser',
+            'created_at',
+            'updated_at',
+        ]

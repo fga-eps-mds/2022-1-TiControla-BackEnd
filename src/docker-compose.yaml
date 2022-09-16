@@ -6,12 +6,16 @@ services:
       - db
     restart: always
     build: ./
+    stdin_open: true
+    tty: true
     command: "./start.sh"
     ports:
       - "8080:8080"
     env_file:
       - ./debug.env
       - ./.env
+    volumes:
+      - .:/current_dir
   db:
     container_name: db
     restart: always

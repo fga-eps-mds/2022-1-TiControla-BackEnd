@@ -1,6 +1,12 @@
 #!/bin/bash
 
-sleep 30
+sleep 45
+python3 manage.py makemigrations
+python3 manage.py makemigrations user
+python3 manage.py makemigrations user_data
+python3 manage.py makemigrations cartao
+python3 manage.py makemigrations gastos
+
 python manage.py flush --no-input
 python manage.py migrate
 ./manage.py createsuperuser --no-input --email=${DJANGO_SUPERUSER_EMAIL}

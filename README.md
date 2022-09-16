@@ -14,6 +14,7 @@
 ## Como fazer requisições HTTP para a API usando cURL.
 A biblioteca cURL não é necessária. Para converter um comando cURL para uma linguagem de programação (como javascript), use o site <https://curlconverter.com/#javascript>. Para fins de debugging, além do cURL, por exemplo, existem as ferramentas httpie e postman.
 
+### Usuário
 
 ##### Como cadastrar um usuário. Observação: é impossível criar um superusuário por meio da API pública.
 
@@ -62,6 +63,8 @@ curl -H "referer: https://161.35.248.92.nip.io/" \
      'https://161.35.248.92.nip.io/profile/'
 ```
 
+### Alguns dados financeiros do usuário (saldo mensal e limite mensal)
+
 ##### Como requisitar dados do usuário logado relacionados a finanças. Essa requisição pode ser usada para mostrar o saldo do usuário, o limite disponível do cartão e o limite máximo do cartão. Para cada usuário, só há um valor de saldo, um único valor de limite disponível e um único valor de limite máximo. Lembre de reutilizar o "sessionid".
 
 ```
@@ -70,13 +73,274 @@ curl -H "Cookie: sessionid=SUBSTITUIR_POR_SESSIONID;" \
      'https://161.35.248.92.nip.io/profile/data/'
 ```
 
-##### Como atualizar dados do usuário logado relacionados a finanças. Essa requisição pode ser usada para atualizar o saldo do usuário (saldo), o limite disponível do cartão (limite_disponivel) e o limite máximo do cartão (limite_maximo). É possível atualizar cada valor de forma separada (perceba que no exemplo abaixo o saldo não é atualizado). Lembre de reutilizar o "csrftoken" e o "sessionid".
+##### Como atualizar dados do usuário logado relacionados a finanças. Essa requisição pode ser usada para atualizar o saldo do usuário (saldo) e o limite máximo do cartão (limite_maximo). É possível atualizar cada valor de forma separada (perceba que no exemplo abaixo o saldo não é atualizado). Lembre de reutilizar o "csrftoken" e o "sessionid".
 
 ```
 curl -H "referer: https://161.35.248.92.nip.io/" \
      -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
      -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
      -X PATCH \
-     --data 'limite_maximo=7000&limite_disponivel=1500' \
+     --data 'limite_maximo=7000' \
      'https://161.35.248.92.nip.io/profile/data/'
+```
+
+### Cartões do usuário
+
+##### Criar cartão. O campo "apelido_cartao" é obrigatório.
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X POST \
+     --data 'apelido_cartao=nubank&limite_credito=7000' \
+     'https://161.35.248.92.nip.io/profile/cartao/'
+```
+
+
+##### Listar cartões do usuário logado.
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X GET \
+     'https://161.35.248.92.nip.io/profile/cartao/'
+```
+
+
+##### Alterar cartão do usuário por id. Cada id de cartão é único, e não se repete entre usuários.
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X PATCH \
+     --data 'id=1&apelido_cartao=digio&limite_credito=2000' \
+     'https://161.35.248.92.nip.io/profile/cartao/'
+```
+
+
+##### Deletar cartao do usuário por id. O id é do cartão.
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X DELETE \
+     --data 'id=1' \
+     'https://161.35.248.92.nip.io/profile/cartao/'
+```
+
+### Gastos dos cartões de crédito do usuário
+
+
+##### Criar gasto do cartão de crédito. Os campos "id_cartao" e "date" (data de pagar a conta) são obrigatórios.
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X POST \
+     --data 'id_cartao=1&date=2020-01-01' \
+     'https://161.35.248.92.nip.io/profile/gastos/credito/'
+
+Atributos: id_cartao, quantidade_parcelas, date, tipo, nome, descricao, valor.
+```
+
+
+##### Listar gastos do cartão de crédito do usuário logado
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X GET \
+     'https://161.35.248.92.nip.io/profile/gastos/credito/'
+```
+
+
+##### Alterar gasto do cartão de crédito por id. Cada id de gasto é único, e não se repete jamais (exceto em caso de inconsistência no banco).
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X PATCH \
+     --data 'id=1&quantidade_parcelas=12' \
+     'https://161.35.248.92.nip.io/profile/gastos/credito/'
+
+Atributos: id_cartao, quantidade_parcelas, date, tipo, nome, descricao, valor.
+```
+
+
+##### Deletar gasto do cartão de crédito por id. Cada id de gasto é único, e não se repete jamais (exceto em caso de inconsistência no banco).
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X DELETE \
+     --data 'id=1' \
+     'https://161.35.248.92.nip.io/profile/gastos/credito/'
+```
+
+### Gastos dos cartões de débito do usuário
+
+##### Criar gasto do cartão de débito. Não há campo "id_cartao" e nem "quantidade_parcelas" aqui. O campo "date" (data de pagar a conta) é obrigatório.
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X POST \
+     --data 'date=2020-01-01' \
+     'https://161.35.248.92.nip.io/profile/gastos/debito/'
+
+Atributos: date, tipo, nome, descricao, valor.
+```
+
+
+##### Listar gastos do cartão de débito do usuário logado
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X GET \
+     'https://161.35.248.92.nip.io/profile/gastos/debito/'
+
+```
+
+
+##### Alterar gasto do cartão de débito por id. Cada id de gasto é único, e não se repete jamais (exceto em caso de inconsistência no banco).
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X PATCH \
+     --data 'id=1&tipo=alimentacao&valor=100' \
+     'https://161.35.248.92.nip.io/profile/gastos/debito/'
+
+Atributos: date, tipo, nome, descricao, valor.
+```
+
+
+##### Deletar gasto do cartão de débito por id. Cada id de gasto é único, e não se repete jamais (exceto em caso de inconsistência no banco).
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X DELETE \
+     --data 'id=1' \
+     'https://161.35.248.92.nip.io/profile/gastos/debito/'
+```
+
+### Gastos fixos (indiferente em relação ao cartão)
+
+##### Criar gasto fixo. Não há campo "id_cartao" e nem "quantidade_parcelas" aqui. O campo "date" (data de pagar a conta) é obrigatório.
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X POST \
+     --data 'date=2020-01-01' \
+     'https://161.35.248.92.nip.io/profile/gastos/fixo/'
+
+Atributos: date, tipo, nome, descricao, valor.
+```
+
+
+##### Listar gastos fixos do usuário logado
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X GET \
+     'https://161.35.248.92.nip.io/profile/gastos/fixo/'
+
+```
+
+
+##### Alterar gasto fixo por id. Cada id de gasto é único, e não se repete jamais (exceto em caso de inconsistência no banco).
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X PATCH \
+     --data 'id=1&tipo=alimentacao&valor=100' \
+     'https://161.35.248.92.nip.io/profile/gastos/fixo/'
+
+Atributos: date, tipo, nome, descricao, valor.
+```
+
+
+##### Deletar gasto fixo por id. Cada id de gasto é único, e não se repete jamais (exceto em caso de inconsistência no banco).
+
+```
+curl -H "referer: https://161.35.248.92.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X DELETE \
+     --data 'id=1' \
+     'https://161.35.248.92.nip.io/profile/gastos/fixo/'
+```
+
+
+
+### Outros
+
+##### Limites disponíveis agrupados por mês.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X GET \
+        'https://161.35.248.92.nip.io/profile/limite-disponivel/mensal/'
+```
+
+##### Saldos disponíveis agrupados por mês.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X GET \
+        'https://161.35.248.92.nip.io/profile/saldo-disponivel/mensal/'
+```
+
+##### Total gasto por cartão de crédito e por mês.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X GET \
+        'https://161.35.248.92.nip.io/profile/cartao/total/mensal/'
+```
+
+##### Gastos do cartão de débito agrupados por mês e por dia.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X GET \
+        'https://161.35.248.92.nip.io/profile/gastos/debito/diario/'
+```
+
+##### Gastos do cartão de crédito agrupados por mês e por dia.
+
+```
+    curl -H "referer: https://161.35.248.92.nip.io/" \
+        -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+        -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+        -X GET \
+        'https://161.35.248.92.nip.io/profile/gastos/credito/diario/'
 ```
